@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="small-card">
+  <h2>{{ league.name }}</h2>
+  <div class="muted">Season: {{ league.season|default:"N/A" }}</div>
+
+  <h4 style="margin-top:12px">Teams</h4>
+  <ul>
+    {% for team in teams %}
+      <li>{{ team.name }}</li>
+    {% empty %}
+      <li>No teams.</li>
+    {% endfor %}
+  </ul>
+
+  <p style="margin-top:12px">
+    <a class="btn" href="{% url 'matches:create_match' %}?league={{ league.pk }}">Create Match (manual)</a>
+    <a class="btn ghost" href="{% url 'tournaments:create_tournament' %}?league={{ league.pk }}">Create Tournament</a>
+  </p>
+
+  <p style="margin-top:12px">
+    {# Use the leagues namespace for standings and delete. #}
+    <a class="btn ghost" href="{% url 'leagues:standings' league.pk %}">View Standings</a>
+    <a class="btn ghost" href="{% url 'leagues:league_delete' league.pk %}">Delete League</a>
+  </p>
+
+  <p style="margin-top:10px" class="small muted">
+    To auto-generate a round-robin schedule for this league run:
+    <br><code>python manage.py generate_schedule {{ league.pk }}</code>
+  </p>
+
+  <div style="margin-top:16px">
+    <h4>Matches</h4>
+    {% if matches %}
+      <ul class="list">
+        {% for m in matches %}
+          <li>
+            <a href="{% url 'matches:match_detail' m.pk %}">
+              {{ m.home.short_name }} vs {{ m.away.short_name }} — {{ m.date|date:"M j, Y H:i" }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <div class="muted">No matches scheduled for this league.</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+  .choice-wrap{max-width:900px;margin:18px auto;padding:18px;border-radius:12px;background:var(--card);box-shadow:0 12px 30px rgba(15,23,42,0.06)}
+  .choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px}
+  @media(max-width:680px){.choice-grid{grid-template-columns:1fr}}
+</style>
+
+<div class="choice-wrap">
+  <h2 style="margin-top:0">Create an account</h2>
+  <p class="muted">Choose how you'd like to join Sportify — as a team manager or as an individual player.</p>
+
+  <div class="choice-grid">
+    <div class="card">
+      <h3 style="margin:0">Team manager</h3>
+      <p class="small muted" style="margin-top:8px">Manage a team, invite players, schedule matches and view team statistics.</p>
+      <div style="margin-top:12px"><a class="btn" href="{% url 'accounts:signup_manager' %}">Sign up as Manager</a></div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin:0">Player</h3>
+      <p class="small muted" style="margin-top:8px">Create a player profile, track goals and match stats, and join teams.</p>
+      <div style="margin-top:12px"><a class="btn ghost" href="{% url 'accounts:signup_player' %}">Sign up as Player</a></div>
+    </div>
+  </div>
+
+  <div style="margin-top:16px" class="muted">Already have an account? <a href="{% url 'login' %}">Login</a></div>
+</div>
+{% endblock %}

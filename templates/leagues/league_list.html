@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+  /* Use global tokens from base.html to keep color consistent across the site */
+  .leagues-wrap{max-width:1100px;margin:20px auto;padding:12px}
+  .head{display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-top:14px}
+  .card{background:var(--card);padding:16px;border-radius:12px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;justify-content:space-between}
+  .card h3{margin:0;font-size:18px}
+  .muted{color:var(--muted)}
+  .meta{font-size:13px;color:var(--muted);margin-top:8px}
+  .card-foot{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+  .btn{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;padding:8px 12px;border-radius:10px;border:none;text-decoration:none}
+  /* Match ghost button style used on matches page to keep header actions consistent */
+  .btn.ghost{background:transparent;color:var(--muted);border:1px solid rgba(15,23,42,0.06)}
+  /* Ensure header (Dashboard / Logout) ghost buttons are visible and black */
+  .topbar .btn.ghost, .topbar button.btn.ghost{background:transparent;color:#000;border:1px solid #000}
+
+  /* Fix: ensure anchor links inside cards don't show default browser blue
+    — make them inherit the card typography and only use accent on hover */
+  .card a{color:inherit;text-decoration:none}
+  .card a:hover{color:var(--accent);text-decoration:underline}
+  .card h3 a{font-weight:700}
+</style>
+
+<div class="leagues-wrap">
+  <div class="head">
+    <div>
+      <h2 style="margin:0">Leagues</h2>
+      <div class="muted">Browse leagues and their seasons</div>
+    </div>
+    <div>
+      {% if request.user.is_authenticated %}
+        <a class="btn" href="{% url 'leagues:create_league' %}">Create League</a>
+      {% else %}
+  <a class="btn ghost" href="{% url 'login' %}">Sign in to create</a>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="grid">
+    {% for league in leagues %}
+      <article class="card" role="article" aria-labelledby="league-{{ league.pk }}-title">
+        <div>
+          <h3 id="league-{{ league.pk }}-title"><a href="{% url 'leagues:league_detail' league.pk %}">{{ league.name }}</a></h3>
+          <div class="meta">{{ league.short_description|default:"No description" }}</div>
+        </div>
+        <div class="card-foot">
+          <div class="muted">Teams: {{ league.teams.count }}</div>
+          <a class="btn ghost" href="{% url 'leagues:league_detail' league.pk %}">View</a>
+        </div>
+      </article>
+    {% empty %}
+  <div class="card">No leagues yet. {% if request.user.is_authenticated %}<a class="btn" href="{% url 'leagues:create_league' %}">Create one</a>{% else %}<a class="btn ghost" href="{% url 'login' %}">Sign in</a>{% endif %}</div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

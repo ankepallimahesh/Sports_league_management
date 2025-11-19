@@ -1,0 +1,186 @@
+{% load static %}
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Sportify · League Manager</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <!-- Internal CSS for the whole site (no external frameworks) -->
+   <!-- INTERNAL STYLES (paste inside <head>) -->
+<style>
+  :root{
+    --bg:#f6f8fb;
+    --card:#ffffff;
+    --muted:#6b7280;
+    --accent:#0d6efd; /* change to suit brand */
+    --accent-2:#0b5ed7;
+    --radius:12px;
+    --shadow: 0 6px 18px rgba(15,23,42,0.08);
+    --shadow-sm: 0 2px 8px rgba(15,23,42,0.06);
+    --max-width:1100px;
+    --glass: rgba(255,255,255,0.65);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+
+  html,body{height:100%;margin:0;background:linear-gradient(180deg,#eef3fb 0%,var(--bg) 100%);color:#0f172a;}
+  .container{max-width:var(--max-width);margin:0 auto;padding:28px;}
+
+  /* NAV (optional in base) */
+  .site-header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 0;}
+  .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit;}
+  .brand .logo{
+    width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:700;box-shadow:var(--shadow-sm);
+  }
+  .nav-links{display:flex;gap:10px;align-items:center;}
+  .nav-links a{padding:8px 12px;border-radius:8px;text-decoration:none;color:var(--muted);font-weight:600;font-size:0.95rem;}
+  .nav-links a.cta{background:var(--accent);color:#fff;box-shadow:var(--shadow-sm);}
+
+  /* mobile nav toggle */
+  .menu-toggle{display:none;background:none;border:0;font-size:20px;padding:6px;border-radius:8px;}
+  @media (max-width:820px){
+    .nav-links{display:none;}
+    .menu-toggle{display:inline-flex;}
+    .mobile-nav{display:none;flex-direction:column;gap:8px;padding:10px 0;}
+    .mobile-nav.show{display:flex;}
+  }
+
+  /* HERO */
+  .hero{background:var(--glass);backdrop-filter: blur(6px);border-radius:var(--radius);padding:28px;display:flex;gap:24px;align-items:center;box-shadow:var(--shadow);}
+  .hero-left{flex:1;}
+  .hero-title{font-size:28px;margin:0 0 8px 0;font-weight:700;letter-spacing:-0.2px;}
+  .hero-lead{margin:0 0 16px 0;color:var(--muted);line-height:1.5;}
+  .hero-cta{display:flex;gap:10px;flex-wrap:wrap;}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:10px;border:0;cursor:pointer;font-weight:700;text-decoration:none;}
+  .btn-primary{background:var(--accent);color:white;box-shadow:var(--shadow-sm);}
+  .btn-outline{background:transparent;border:1px solid rgba(15,23,42,0.06);color:var(--muted);}
+
+  .hero-visual{width:140px;height:140px;border-radius:18px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#fff,#f4f7fb);box-shadow:var(--shadow-sm);font-size:46px}
+
+  /* CARDS GRID */
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:22px;}
+  .card{background:var(--card);padding:18px;border-radius:12px;box-shadow:var(--shadow-sm);min-height:110px;position:relative;overflow:hidden;}
+  .card h5{margin:0 0 8px 0;font-size:1rem;}
+  .card p{margin:0;color:var(--muted);font-size:0.9rem;}
+  .card a.stretched{position:absolute;inset:0;text-indent:-9999px;}
+
+  @media (max-width:1100px){ .grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:520px){ .grid{grid-template-columns:1fr;} .hero{flex-direction:column;align-items:flex-start;} .hero-visual{width:100px;height:100px;} .hero-title{font-size:22px;}}
+
+  /* STATS & ACTIVITY */
+  .row{display:flex;gap:16px;margin-top:20px;}
+  .col{flex:1;}
+  .stats{display:flex;gap:18px;align-items:center;}
+  .stat{background:var(--card);padding:12px;border-radius:10px;box-shadow:var(--shadow-sm);min-width:80px;text-align:center;}
+  .stat h3{margin:0;font-size:20px;}
+  .stat small{color:var(--muted);display:block;margin-top:6px;}
+
+  .activity{background:var(--card);padding:14px;border-radius:12px;box-shadow:var(--shadow-sm);}
+  .activity ul{list-style:none;padding:0;margin:0;}
+  .activity li{padding:10px 0;border-bottom:1px solid rgba(15,23,42,0.04);font-size:0.95rem;color:var(--muted);}
+  .activity li:last-child{border-bottom:0;padding-bottom:0;}
+
+  /* FOOTER */
+  .site-footer{text-align:center;color:var(--muted);font-size:0.9rem;margin-top:32px;padding:18px 0;}
+  /* utility */
+  .muted{color:var(--muted)}
+  .shadow-small{box-shadow:var(--shadow-sm)}
+</style>
+
+  <style>
+    :root{
+      --bg:#f4f6f8; --surface:#ffffff; --accent:#0b63d6; --muted:#6b7280;
+      --radius:10px; --max:980px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial; background:var(--bg); color:#1f2937}
+    .container{max-width:var(--max);margin:28px auto;padding:18px}
+    .header{background:linear-gradient(180deg,var(--accent),#0753b4);color:#fff;padding:14px;border-radius:12px}
+    .brand{font-weight:700;font-size:20px}
+    .nav{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+    .nav a{color:#fff;text-decoration:none;padding:6px 8px;border-radius:7px;background:rgba(255,255,255,0.06)}
+    .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+      .card{background:var(--surface);border-radius:var(--radius);box-shadow:0 6px 18px rgba(20,25,30,0.06);padding:16px;margin-bottom:14px}
+      /* Ensure header ghost buttons (Dashboard/Logout) are visible across pages */
+      .topbar .btn.ghost, .topbar button.btn.ghost { background: transparent; color: #000; border: 1px solid #000; }
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+    .btn{display:inline-block;padding:8px 12px;border-radius:8px;text-decoration:none;background:var(--accent);color:#fff;border:0;cursor:pointer}
+    .btn.ghost{background:transparent;color:#333;border:1px solid #e6e8eb}
+    .list{list-style:none;padding-left:0;margin:0}
+    .list li{padding:8px 0;border-bottom:1px dashed #f1f3f5}
+    .small{font-size:13px;color:var(--muted)}
+    label{display:block;font-size:14px;margin-bottom:6px;color:#111827}
+    input[type="text"],input[type="email"],input[type="password"],input[type="datetime-local"],textarea,select{
+      width:100%;padding:8px;border:1px solid #e6e8eb;border-radius:8px;background:#fff;margin-bottom:8px
+    }
+    .footer{margin-top:20px;text-align:center;color:var(--muted);font-size:13px}
+    /* small centered card for registration and short forms */
+    .small-card{max-width:680px;margin:18px auto;padding:18px;border-radius:12px;background:var(--surface);box-shadow:0 10px 30px rgba(20,25,30,0.06)}
+    .form-compact input, .form-compact textarea, .form-compact select{padding:8px;border-radius:8px}
+    .confirm-actions{display:flex;gap:10px}
+    .warning{background:#fff4f2;border-left:4px solid #f04438;padding:12px;border-radius:8px;color:#5a1b12}
+    /* tiny helpers */
+    .muted{color:var(--muted);font-size:13px}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="topbar">
+        <div>
+          <div class="brand">Sportify</div>
+          <div class="small">Manage teams · schedules · stats</div>
+        </div>
+        <div>
+          {# Hide auth links on the home page to avoid duplicate navigation there #}
+          {% if request.path != '/' %}
+            {% if user.is_authenticated %}
+              <span class="small">Hi {{ user.username }}</span>
+              <a class="btn ghost" href="{% url 'accounts:dashboard' %}">Dashboard</a>
+              <form method="post" action="{% url 'logout' %}" style="display:inline;margin-left:8px;">
+                {% csrf_token %}
+                <button class="btn ghost" type="submit">Logout</button>
+              </form>
+            {% else %}
+              <a class="btn" href="{% url 'accounts:signup_choice' %}">Sign up</a>
+              <a class="btn ghost" href="{% url 'login' %}">Login</a>
+            {% endif %}
+          {% endif %}
+        </div>
+      </div>
+
+            <nav class="nav" aria-label="Main navigation">
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'leagues:league_list' %}">Leagues</a>
+        <a href="{% url 'matches:match_list' %}">Matches</a>
+        <a href="{% url 'tournaments:tournament_list' %}">Tournaments</a>
+        <a href="{% url 'accounts:team_list' %}">Teams</a>
+        <a href="{% url 'accounts:player_list' %}">Players</a>
+      </nav>
+
+
+    </header>
+
+    {% if messages %}
+      {% for m in messages %}
+        <div class="card"><div class="small">{{ m }}</div></div>
+      {% endfor %}
+    {% endif %}
+
+    {% block content %}{% endblock %}
+
+    <footer class="footer">Sportify — simplified league management</footer>
+  </div>
+  <!-- tiny JS for mobile nav toggle -->
+<script>
+  document.addEventListener('DOMContentLoaded',function(){
+    const btn = document.querySelector('.menu-toggle');
+    const menu = document.querySelector('.mobile-nav');
+    if(btn && menu){
+      btn.addEventListener('click',()=> menu.classList.toggle('show'));
+    }
+  });
+</script>
+
+</body>
+</html>

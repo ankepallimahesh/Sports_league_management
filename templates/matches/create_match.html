@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<style>
+  .form-page{max-width:920px;margin:20px auto;padding:12px}
+  .card{background:var(--card);border-radius:12px;padding:20px;box-shadow:var(--shadow-sm);}
+  .form-grid{display:grid;grid-template-columns:1fr 320px;gap:18px}
+  @media(max-width:900px){.form-grid{grid-template-columns:1fr}}
+  .field{display:flex;flex-direction:column;margin-bottom:12px}
+  .field label{font-weight:700;margin-bottom:6px}
+  .field input,.field select,.field textarea{padding:10px;border:1px solid #e6e7eb;border-radius:8px}
+  .muted{color:var(--muted)}
+  .actions{display:flex;gap:10px;align-items:center;margin-top:12px}
+  .btn{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;padding:10px 14px;border-radius:10px;border:none;cursor:pointer}
+  .btn.ghost{background:transparent;color:var(--muted);border:1px solid rgba(15,23,42,0.06)}
+  .form-aside .hint{background:var(--glass);padding:12px;border-radius:8px;color:var(--muted);font-size:14px}
+  .errorlist{color:var(--danger);margin:6px 0 0 0}
+</style>
+
+<div class="form-page">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <h2 style="margin:0">Create match</h2>
+      <div class="muted">Create a scheduled match and assign teams</div>
+    </div>
+
+    <form method="post" novalidate aria-labelledby="create-match-title">{% csrf_token %}
+      <div class="form-grid">
+        <div>
+          {% if form.non_field_errors %}
+            <div class="errorlist">{{ form.non_field_errors }}</div>
+          {% endif %}
+
+          {% for field in form.visible_fields %}
+            <div class="field">
+              {{ field.label_tag }}
+              {{ field }}
+              {% if field.help_text %}
+                <small class="muted">{{ field.help_text }}</small>
+              {% endif %}
+              {% if field.errors %}
+                <div class="errorlist">{{ field.errors }}</div>
+              {% endif %}
+            </div>
+          {% endfor %}
+
+          <div class="actions">
+            <button class="btn" type="submit">Create match</button>
+            <a class="btn ghost" href="{% url 'matches:match_list' %}">Cancel</a>
+          </div>
+        </div>
+
+        <aside class="form-aside">
+          <div class="hint">
+            <strong>Tips</strong>
+            <ul style="margin:8px 0 0 18px;padding:0">
+              <li>Pick a start date & time in your league timezone.</li>
+              <li>Leave score fields blank if match hasn’t been played yet.</li>
+              <li>Use the notes field for venue, referee or special instructions.</li>
+            </ul>
+          </div>
+          <div style="height:18px"></div>
+          <div class="hint">
+            <strong>Accessibility</strong>
+            <p class="muted" style="margin:6px 0 0 0">All form fields are labeled and keyboard accessible. Use Tab to navigate.</p>
+          </div>
+        </aside>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  // Focus first input for convenience
+  (function(){
+    var el = document.querySelector('.form-page form input, .form-page form select, .form-page form textarea');
+    if(el) el.focus();
+  })();
+</script>
+
+{% endblock %}

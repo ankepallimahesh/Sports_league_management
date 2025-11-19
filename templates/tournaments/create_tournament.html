@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<style>
+  .form-wrap{max-width:760px;margin:22px auto;background:#fff;padding:18px;border-radius:12px;box-shadow:0 12px 32px rgba(10,20,40,0.06)}
+  .form-helpers{color:var(--muted);font-size:13px;margin-top:8px}
+  label{font-weight:700}
+  .actions{display:flex;gap:10px;margin-top:12px}
+</style>
+
+<div class="form-wrap">
+  <h2 style="margin-top:0">Create Tournament</h2>
+  <p class="muted">Create a tournament and configure participants and bracket settings.</p>
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {{ form|crispy }}
+    <div class="actions">
+      <button class="btn" type="submit">Create Tournament</button>
+      <a class="btn ghost" href="{% url 'tournaments:tournament_list' %}">Cancel</a>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

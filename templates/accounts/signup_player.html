@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+  .signup-wrap{max-width:720px;margin:18px auto;padding:18px;border-radius:12px;background:var(--card);box-shadow:0 12px 30px rgba(15,23,42,0.06)}
+  .helpers{color:var(--muted);font-size:13px}
+</style>
+
+<div class="signup-wrap">
+  <h3 style="margin-top:0">Player — Sign up</h3>
+  <p class="muted">Create a player profile to track goals and stats.</p>
+
+  <form method="post" enctype="multipart/form-data" class="form-compact" aria-labelledby="signup-player-form">
+    {% csrf_token %}
+    <div>
+      <h4 id="signup-player-form">Account details</h4>
+      {{ form.as_p }}
+    </div>
+
+    <hr style="margin:12px 0">
+
+    <div>
+      <h4>Player profile</h4>
+      <div class="helpers">Add your bio and a photo so teammates recognize you.</div>
+      <div style="margin-top:8px">{{ player_form.as_p }}</div>
+    </div>
+
+    <div style="margin-top:12px;display:flex;gap:10px">
+      <button class="btn" type="submit">Create Player account</button>
+      <a class="btn ghost" href="{% url 'home' %}">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

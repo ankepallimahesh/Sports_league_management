@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<style>
+	.register-wrap{max-width:720px;margin:18px auto;padding:18px;border-radius:12px;background:var(--card);box-shadow:0 12px 30px rgba(15,23,42,0.06)}
+	.helpers{color:var(--muted);font-size:13px}
+</style>
+
+<div class="register-wrap">
+	<h2 style="margin-top:0">Register Team</h2>
+	<p class="muted">Create a new team and invite players to join.</p>
+	<form method="post" enctype="multipart/form-data">
+		{% csrf_token %}
+		{{ form|crispy }}
+		<div style="margin-top:10px">
+			<button class="btn btn-primary">Create Team</button>
+			<a class="btn ghost" href="{% url 'accounts:team_list' %}">Back</a>
+		</div>
+	</form>
+</div>
+{% endblock %}

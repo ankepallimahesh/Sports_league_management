@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+  .confirm-wrap{max-width:680px;margin:28px auto;padding:20px;border-radius:14px;background:#fff;box-shadow:0 12px 32px rgba(10,20,40,0.06)}
+  .danger{background:#fff6f6;border-left:4px solid #f04438;padding:14px;border-radius:10px;color:#7a1b10}
+  .confirm-actions{display:flex;gap:12px;margin-top:14px;align-items:center}
+  .muted{color:var(--muted)}
+</style>
+
+<div class="confirm-wrap" role="dialog" aria-labelledby="confirm-title" aria-modal="true">
+  <h3 id="confirm-title" style="margin-top:0">Delete {{ type }}</h3>
+  <p class="danger">You are about to permanently delete <strong>{{ object.name }}</strong>. This action cannot be undone.</p>
+
+  <form method="post" aria-label="Confirm deletion form">
+    {% csrf_token %}
+    <div class="confirm-actions">
+      <button class="btn" type="submit">Yes — delete</button>
+      <a class="btn ghost" href="{% url 'accounts:team_detail' object.pk %}">Cancel</a>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

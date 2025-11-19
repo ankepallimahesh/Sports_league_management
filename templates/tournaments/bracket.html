@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>{{ tournament.name }} - Bracket</h2>
+{% for rnum, matches in rounds.items %}
+  <h3>Round {{ rnum }}</h3>
+  <ul>
+    {% for m in matches %}
+      <li>{{ m.home.name }} vs {{ m.away.name }} {% if m.played %}- {{ m.home_score }}:{{ m.away_score }} - Winner: {{ m.winner }}{% endif %}</li>
+    {% endfor %}
+  </ul>
+{% endfor %}
+{% endblock %}

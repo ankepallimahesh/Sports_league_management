@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+  .team-hero{display:flex;gap:20px;align-items:center;background:var(--card);padding:22px;border-radius:16px;box-shadow:var(--shadow);}
+  .team-logo-large{width:160px;height:160px;border-radius:16px;object-fit:cover;display:block;flex:0 0 auto}
+  .team-info h2{margin:0;font-size:1.7rem}
+  .meta{color:var(--muted);margin-top:6px}
+  .controls{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+  .players-card{margin-top:20px;padding:16px;border-radius:14px;background:var(--card);box-shadow:var(--shadow-sm)}
+  .player-row{display:flex;align-items:center;justify-content:space-between;padding:12px;border-bottom:1px solid rgba(15,23,42,0.04)}
+  .player-row:last-child{border-bottom:0}
+  .player-actions a{margin-left:8px}
+  .players-empty{color:var(--muted);padding:8px}
+  /* Keep ghost button styling consistent across pages (matches style) */
+  .btn.ghost{background:transparent;color:var(--muted);border:1px solid rgba(15,23,42,0.06)}
+  /* Ensure header (Dashboard / Logout) ghost buttons are visible and black */
+  .topbar .btn.ghost, .topbar button.btn.ghost{background:transparent;color:#000;border:1px solid #000}
+
+  /* focus and keyboard friendliness */
+  a[role="button"], .btn{outline-offset:3px}
+
+  @media (max-width:860px){ .team-hero{flex-direction:column;align-items:flex-start} .team-logo-large{width:120px;height:120px} }
+</style>
+
+<div class="container">
+  <div class="team-hero" role="region" aria-labelledby="team-title">
+    <div>
+      {% if team.logo %}
+        <img src="{{ team.logo.url }}" alt="{{ team.name }} logo" class="team-logo-large">
+      {% else %}
+        <div class="team-logo-large" style="display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;font-weight:800;font-size:56px;border-radius:16px">{{ team.name|slice:":1" }}</div>
+      {% endif %}
+    </div>
+
+    <div class="team-info">
+      <h2 id="team-title">{{ team.name }}</h2>
+      <div class="meta">{{ team.short_name|default:"" }}</div>
+      <p class="muted" style="margin-top:10px">{{ team.description|default:"No description available" }}</p>
+
+      <div class="controls">
+        {% if team.user_is_member %}
+          <a class="btn" href="{% url 'accounts:team_edit' team.pk %}" aria-label="Edit {{ team.name }}">Edit</a>
+          <form method="post" action="{% url 'accounts:team_delete' team.pk %}" style="display:inline">{% csrf_token %}
+            <button class="btn ghost" type="submit" aria-label="Delete {{ team.name }}">Delete</button>
+          </form>
+        {% endif %}
+        <a class="btn ghost" href="{% url 'accounts:team_list' %}">Back to teams</a>
+      </div>
+    </div>
+  </div>
+
+  <section class="players-card" aria-labelledby="players-heading">
+    <h3 id="players-heading">Players</h3>
+    {% if team.players.all %}
+      <div role="list">
+        {% for p in team.players.all %}
+          <div class="player-row" role="listitem">
+            <div style="min-width:0">
+              <a href="{% url 'accounts:player_profile' p.pk %}" style="font-weight:700">{{ p.full_name }}</a>
+              <div class="muted" style="font-size:13px">{{ p.position|default:"" }} {% if p.age %}· {{ p.age }} yrs{% endif %}</div>
+            </div>
+            <div class="player-actions">
+              <a class="btn ghost" href="{% url 'accounts:player_profile' p.pk %}">View</a>
+              {% if team.user_is_member %}
+                <a class="btn" href="{% url 'accounts:team_edit' team.pk %}#players" aria-label="Manage players for {{ team.name }}">Manage</a>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="players-empty">No players added yet.</div>
+    {% endif %}
+  </section>
+</div>
+
+{% endblock %}

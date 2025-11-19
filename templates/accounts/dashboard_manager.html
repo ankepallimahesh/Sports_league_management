@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+  .dashboard-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:880px){.dashboard-grid{grid-template-columns:1fr}}
+</style>
+
+<div class="container">
+  <h2 style="margin-top:0">Manager Dashboard</h2>
+  <div class="dashboard-grid">
+    <div class="card">
+      <h4>Your Teams</h4>
+      <ul class="list">
+        {% for team in teams %}
+          <li>
+            <a href="{% url 'accounts:team_detail' team.pk %}">{{ team.name }}</a>
+            <span class="small muted"> — {{ team.short_name|default:"" }}</span>
+          </li>
+        {% empty %}
+          <li class="small">You don't have any teams yet.</li>
+        {% endfor %}
+      </ul>
+
+      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+        <a class="btn" href="{% url 'accounts:team_register' %}">Create Team</a>
+  <a class="btn ghost" href="{% url 'leagues:create_league' %}">Create League</a>
+        <a class="btn ghost" href="{% url 'tournaments:create_tournament' %}">Create Tournament</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h4>Quick links</h4>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+        <a class="btn" href="{% url 'matches:create_match' %}">Create Match</a>
+  <a class="btn ghost" href="{% url 'leagues:league_list' %}">Manage Leagues</a>
+        <a class="btn ghost" href="{% url 'tournaments:tournament_list' %}">Manage Tournaments</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

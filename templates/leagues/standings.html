@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="small-card">
+  <h2>Standings — {{ league.name }}</h2>
+  <div class="muted">Updated: {{ now|date:"M j, Y H:i" }}</div>
+
+  <table style="width:100%;border-collapse:collapse;margin-top:12px">
+    <thead>
+      <tr style="text-align:left">
+        <th>#</th>
+        <th>Team</th>
+        <th>Pl</th>
+        <th>W</th>
+        <th>D</th>
+        <th>L</th>
+        <th>GF</th>
+        <th>GA</th>
+        <th>GD</th>
+        <th>Pts</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in standings %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>
+          <a href="{% url 'leagues:league_detail' league.pk %}#team-{{ row.team.id }}">
+            {{ row.team.name }}
+          </a>
+        </td>
+        <td>{{ row.played }}</td>
+        <td>{{ row.won }}</td>
+        <td>{{ row.draw }}</td>
+        <td>{{ row.lost }}</td>
+        <td>{{ row.gf }}</td>
+        <td>{{ row.ga }}</td>
+        <td>{{ row.gd }}</td>
+        <td>{{ row.points }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <p style="margin-top:12px">
+    <a class="btn ghost" href="{% url 'leagues:league_detail' league.pk %}">Back to League</a>
+    <a class="btn" href="{% url 'leagues:standings' league.pk %}">Refresh</a>
+  </p>
+</div>
+{% endblock %}
